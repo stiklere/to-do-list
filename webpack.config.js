@@ -13,7 +13,7 @@ module.exports = {
       {
         test: /\.(js|jsx|ts|tsx)$/,
         exclude: /node_modules/,
-        use: "babel-loader",
+        use: "ts-loader",
       },
       {
         test: /\.css$/,
@@ -32,6 +32,10 @@ module.exports = {
     port: 3000,
   },
   resolve: {
+    extensions: [".js", ".jsx", ".ts", ".tsx"],
     modules: [path.resolve(__dirname, "src"), "node_modules"],
+    alias: {
+      "@components": path.resolve(__dirname, "src/components"),
+    },
   },
 };
