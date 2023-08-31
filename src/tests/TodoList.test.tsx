@@ -11,24 +11,24 @@ describe("#TodoList", () => {
 
     expect(todoListElement.length).not.toBeLessThanOrEqual(0);
   });
-});
 
-describe("#updateItems", () => {
-  it("should update 'complete' property after what it dissapead from UI", () => {
-    render(<TodoList />);
+  describe("#updateItems", () => {
+    it("should update 'complete' property after what it dissapead from UI", () => {
+      render(<TodoList />);
 
-    const allCompleteButtons = screen.getAllByTestId(
-      "todo-list-complete-button"
-    );
+      const allCompleteButtons = screen.getAllByTestId(
+        "todo-list-complete-button"
+      );
 
-    fireEvent.click(allCompleteButtons[0]);
+      fireEvent.click(allCompleteButtons[0]);
 
-    const allCompleteButtonsAfterClick = screen.getAllByTestId(
-      "todo-list-complete-button"
-    );
+      const allCompleteButtonsAfterClick = screen.getAllByTestId(
+        "todo-list-complete-button"
+      );
 
-    expect(allCompleteButtons.length).not.toEqual(
-      allCompleteButtonsAfterClick.length
-    );
+      expect(allCompleteButtons.length).not.toEqual(
+        allCompleteButtonsAfterClick.length
+      );
+    });
   });
 });
