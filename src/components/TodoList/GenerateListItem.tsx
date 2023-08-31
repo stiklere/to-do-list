@@ -11,7 +11,8 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import "./TodoList.css";
 import { Item } from "../models/ListItem.interface";
-import { completeTask } from "./TaskUtils";
+import { handleTask } from "./TaskUtils";
+import { ItemActions } from "../models/ItemActions.enum";
 
 export const generateListItem = (
   element: React.ReactElement,
@@ -26,7 +27,7 @@ export const generateListItem = (
     const completeButton = !isComplete && (
       <IconButton
         edge="end"
-        onClick={() => completeTask(id, items, updateItem)}
+        onClick={() => handleTask(ItemActions.COMPLETE, id, items, updateItem)}
       >
         <CheckCircleOutlineIcon
           data-testid="todo-list-complete-button"
@@ -36,7 +37,10 @@ export const generateListItem = (
     );
 
     const deleteButton = isDeletable && (
-      <IconButton edge="end">
+      <IconButton
+        edge="end"
+        onClick={() => handleTask(ItemActions.DELETE, id, items, updateItem)}
+      >
         <DeleteIcon />
       </IconButton>
     );
