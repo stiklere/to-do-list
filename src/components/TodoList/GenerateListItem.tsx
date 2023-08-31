@@ -1,3 +1,4 @@
+import React from "react";
 import {
   ListItemAvatar,
   Avatar,
@@ -5,57 +6,65 @@ import {
   IconButton,
   ListItemText,
 } from "@mui/material";
-import React from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import "./TodoList.css";
 import { Item } from "../models/ListItem.interface";
+import { completeTask } from "./TaskUtils";
 
 export const generateListItem = (
   element: React.ReactElement,
-  items: Item[]
+  items: Item[],
+  updateItem: (updatedItems: Item[]) => void
 ) => {
-  return items.map((value) =>
-    React.cloneElement(element, {
-      key: value.id,
+  return items.map(({ id, actions, primaryText, secondaryText }) => {
+    const isComplete = actions.complete;
+
+    const isDeletable = actions.delete;
+
+    const completeButton = !isComplete && (
+      <IconButton
+        edge="end"
+        onClick={() => completeTask(id, items, updateItem)}
+      >
+        <CheckCircleOutlineIcon
+          data-testid="todo-list-complete-button"
+          className="list-item__icon--complete"
+        />
+      </IconButton>
+    );
+
+    const deleteButton = isDeletable && (
+      <IconButton edge="end">
+        <DeleteIcon />
+      </IconButton>
+    );
+
+    return React.cloneElement(element, {
+      key: id,
       children: (
         <div className="list-items">
           <div>
-            {value.actions.delete && (
-              <ListItemSecondaryAction>
-                {!value.actions.complete && (
-                  <IconButton edge="end" aria-label="complete">
-                    <CheckCircleOutlineIcon className="list-item__icon--complete" />
-                  </IconButton>
-                )}
-                <IconButton edge="end" aria-label="delete">
-                  <DeleteIcon />
-                </IconButton>
-              </ListItemSecondaryAction>
-            )}
+            <ListItemSecondaryAction>
+              {completeButton}
+              {deleteButton}
+            </ListItemSecondaryAction>
           </div>
           <div className="list-item-text">
-            {value.actions.complete ? (
-              <ListItemAvatar>
-                <Avatar>
+            <ListItemAvatar>
+              <Avatar>
+                {isComplete ? (
                   <CheckCircleIcon className="list-item__icon--complete" />
-                </Avatar>
-              </ListItemAvatar>
-            ) : (
-              <ListItemAvatar>
-                <Avatar>
+                ) : (
                   <CheckCircleOutlineIcon />
-                </Avatar>
-              </ListItemAvatar>
-            )}
-            <ListItemText
-              primary={value.primaryText}
-              secondary={value.secondaryText}
-            />
+                )}
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText primary={primaryText} secondary={secondaryText} />
           </div>
         </div>
       ),
-    })
-  );
+    });
+  });
 };
